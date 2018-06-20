@@ -3,9 +3,10 @@ package com.soft_industry.findgift.presentation.pages.randomgift
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.util.Log
-import android.view.animation.OvershootInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
 import com.gojuno.koptional.Some
@@ -27,20 +28,15 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
 
     companion object {
         val GIFT_TARGET_ARG = ""
-
-        @JvmStatic
         fun start(context: Context, giftTarget: GiftTarget?) {
             val intent=  Intent(context, RandomGiftActivity::class.java)
-                    .apply {
-                        giftTarget?.let { putExtra(GIFT_TARGET_ARG, giftTarget) }
-                    }
+                    .apply { giftTarget?.let { putExtra(GIFT_TARGET_ARG, giftTarget) } }
             context.startActivity(intent)
         }
 
     }
 
-    override fun createPresenter() = presenter
-
+    //  Activity lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as App)
                 .component
@@ -64,6 +60,9 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
         shakeHandler.unregisterListener()
     }
 
+    //  MVI
+    override fun createPresenter() = presenter
+
     override fun loadGiftIntent(): Observable<Optional<GiftTarget>> {
         val value = intent.getParcelableExtra<GiftTarget>(GIFT_TARGET_ARG)
         return Observable.just(if (value == null) {
@@ -84,25 +83,41 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
         }
 
     }
-
+    //   internal
     private fun handleAnimation() {
-        rotatePhone(10f) {
-            rotatePhone(-10f) {
-                rotatePhone(10f) {
-                    rotatePhone(-10f) {
-                        rotatePhone(0f) { }
-
-                        }
-                }
-            }
+        val pivotX = image_phone_container.width / 2
+        val pivotY = image_phone_container.height
+        val endAnimation = createAnimation(-10f, 0f, pivotX, pivotY) {}
+        val from = -10f
+        val to = 10f
+        val animation = createAnimation(from, to, pivotX, pivotY) {
+            image_phone_container.startAnimation(endAnimation)
         }
+        animation.repeatCount = 3
+        image_phone_container.startAnimation(animation)
     }
 
-    private fun rotatePhone(rotation: Float, action: () -> Unit) {
-        ViewCompat.animate(image_phone_container)
-                .rotation(rotation)
-                .setInterpolator(OvershootInterpolator())
-                .withEndAction { action() }
+    private fun createAnimation(from: Float,
+                                to: Float,
+                                pivotX: Int,
+                                pivotY: Int,
+                                action: () -> Unit)
+            : Animation {
+        return RotateAnimation(from, to, pivotX.toFloat(), pivotY.toFloat())
+                .apply {
+                    repeatCount = Animation.INFINITE
+                    repeatMode = Animation.REVERSE
+                    duration = 300
+                    interpolator = AccelerateInterpolator()
+                    setAnimationListener(object : Animation.AnimationListener {
+                        override fun onAnimationRepeat(animation: Animation?) {}
+                        override fun onAnimationStart(animation: Animation?) {}
+                        override fun onAnimationEnd(animation: Animation?) {
+                            action()
+                        }
+
+                    })
+                }
     }
 
     private fun renderLabel(targetLabel: String) {

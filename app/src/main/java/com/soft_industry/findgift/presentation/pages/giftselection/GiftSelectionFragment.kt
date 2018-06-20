@@ -12,6 +12,7 @@ import com.soft_industry.findgift.R
 import com.soft_industry.findgift.domain.entities.Gift
 import com.soft_industry.findgift.domain.entities.GiftTarget
 import com.soft_industry.findgift.presentation.pages.giftdetails.GiftDetailsActivity
+import com.soft_industry.findgift.presentation.pages.randomgift.RandomGiftActivity
 import com.soft_industry.findgift.utils.adapter.DefaultAdapter
 import com.soft_industry.findgift.utils.addDefaultTransitions
 import io.reactivex.Observable
@@ -34,11 +35,15 @@ class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresen
     }
 
     private val defaultAdapter = DefaultAdapter(GiftViewHolder.Factory(this::openGiftDetails))
+    private lateinit var giftTarget: GiftTarget
+
     @Inject lateinit var presenter: GiftSelectionPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity!!.application as App).component.inject(this)
         super.onCreate(savedInstanceState)
+        giftTarget = arguments!!.getParcelable(KEY_TARGET)
+
 
     }
     override fun onCreateView(inflater: LayoutInflater,
@@ -52,9 +57,11 @@ class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresen
         list_gifts.adapter = defaultAdapter
         list_gifts.itemAnimator = SlideInUpAnimator()
         list_gifts.layoutManager = GridLayoutManager(context, 2)
+        fab_add.setOnClickListener { RandomGiftActivity.start(context!!, giftTarget) }
     }
 
-    override fun loadGiftList() = Observable.just(arguments!!.getParcelable<GiftTarget>(KEY_TARGET))
+
+    override fun loadGiftList() = Observable.just(giftTarget)
 
     override fun createPresenter() = presenter
 

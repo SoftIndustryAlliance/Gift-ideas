@@ -4,6 +4,7 @@ import com.soft_industry.findgift.domain.entities.GiftTarget
 import com.soft_industry.findgift.domain.repository.DataRepository
 import com.soft_industry.findgift.presentation.pages.randomgift.RandomGiftReducer
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class LoadRandomGift @Inject constructor(val dataRepository: DataRepository) {
@@ -12,5 +13,7 @@ class LoadRandomGift @Inject constructor(val dataRepository: DataRepository) {
                 .map { RandomGiftReducer.LoadingSucceded(it) }
                 .cast(RandomGiftReducer::class.java)
                 .startWith(RandomGiftReducer.Loading)
+                .subscribeOn(Schedulers.io())
+
     }
 }

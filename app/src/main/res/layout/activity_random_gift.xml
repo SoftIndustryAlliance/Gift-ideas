@@ -65,7 +65,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/image_phone_container" />
-
+    <ImageView
+        android:id="@+id/image_cloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="68dp"
+        android:translationX="10dp"
+        android:src="@drawable/yellow_cloud"
+        app:layout_constraintBottom_toBottomOf="@+id/image_rainbow"
+        app:layout_constraintEnd_toEndOf="@+id/image_phone_container"
+        app:layout_constraintTop_toTopOf="@+id/image_phone_container" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/image_phone_container"
@@ -76,16 +85,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_random_descr"
         app:layout_constraintBottom_toTopOf="@id/fab_close_gift">
-        <ImageView
-            android:id="@+id/image_cloud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:translationX="10dp"
-            android:src="@drawable/yellow_cloud"
-            app:layout_constraintBottom_toTopOf="@+id/image_box_base"
-            app:layout_constraintEnd_toEndOf="@+id/image_phone"
-            app:layout_constraintTop_toTopOf="@+id/image_phone" />
+
         <ImageView
             android:id="@+id/image_phone"
             android:layout_width="wrap_content"

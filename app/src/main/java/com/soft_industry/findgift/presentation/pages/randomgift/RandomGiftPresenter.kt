@@ -6,7 +6,6 @@ import com.soft_industry.findgift.domain.entities.GiftTarget
 import com.soft_industry.findgift.domain.task.LoadRandomGift
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -19,7 +18,6 @@ class RandomGiftPresenter @Inject constructor(val loadRandomGift: LoadRandomGift
         val shakeIntent = shakeIntent()
 
         val intents = Observable.merge(loadGiftIntent, shakeIntent)
-                .subscribeOn(Schedulers.io())
                 .onErrorReturn { RandomGiftReducer.GotError(it) }
                 .scan(initialVs) { vs, reducer -> reducer.reduce(vs) }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -33,10 +31,11 @@ class RandomGiftPresenter @Inject constructor(val loadRandomGift: LoadRandomGift
     }
 
     private fun shakeIntent() = intent { it.shakeIntent() }
+            .take(1)
             .flatMap { Observable.concat(animate(), openGift()) }
 
     private fun openGift(): Observable<RandomGiftReducer> {
-        return Observable.interval(500, TimeUnit.MILLISECONDS)
+        return Observable.interval(2000, TimeUnit.MILLISECONDS)
                 .take(1)
                 .map { RandomGiftReducer.ShowGift }
     }
