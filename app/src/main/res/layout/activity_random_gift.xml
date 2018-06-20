@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/violet_bg">
+
+    <TextView
+        android:id="@+id/label_random_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="2sp"
+        android:text="@string/title_random_idea"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/label_random_descr"/>
+
+    <TextView
+        android:id="@+id/label_random_descr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="5sp"
+        android:text="@string/label_random_gift_desc"
+        android:textColor="#3f325c"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/label_random_title" />
+    <ImageView
+        android:id="@+id/image_hand_random"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/hand_random"
+        android:translationY="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_rainbow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/lines"
+        app:layout_constraintBottom_toTopOf="@+id/fab_close_gift"
+        app:layout_constraintTop_toTopOf="@+id/image_phone_container" />
+
+    <ImageView
+        android:id="@+id/image_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/yellow_elements"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/image_phone_container" />
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/image_phone_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_random_descr"
+        app:layout_constraintBottom_toTopOf="@id/fab_close_gift">
+        <ImageView
+            android:id="@+id/image_cloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:translationX="10dp"
+            android:src="@drawable/yellow_cloud"
+            app:layout_constraintBottom_toTopOf="@+id/image_box_base"
+            app:layout_constraintEnd_toEndOf="@+id/image_phone"
+            app:layout_constraintTop_toTopOf="@+id/image_phone" />
+        <ImageView
+            android:id="@+id/image_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/hand_with_phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/image_box_knot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bow_knot"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/image_phone"
+            app:layout_constraintStart_toStartOf="@+id/image_phone"
+            app:layout_constraintBottom_toTopOf="@id/image_box_top"/>
+
+        <ImageView
+            android:id="@+id/image_box_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/box_top"
+            app:layout_constraintEnd_toEndOf="@+id/image_phone"
+            app:layout_constraintStart_toStartOf="@+id/image_phone"
+            app:layout_constraintTop_toTopOf="@id/image_phone"
+            app:layout_constraintBottom_toBottomOf="@id/image_phone"/>
+
+        <ImageView
+            android:id="@+id/image_box_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/box_base"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintTop_toBottomOf="@id/image_box_top"
+            app:layout_constraintEnd_toEndOf="@+id/image_phone"
+            app:layout_constraintStart_toStartOf="@+id/image_phone" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_close_gift"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@android:color/white"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_close" />
+</android.support.constraint.ConstraintLayout>

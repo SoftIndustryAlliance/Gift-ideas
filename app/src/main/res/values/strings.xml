@@ -1,0 +1,71 @@
+<resources>
+    <string name="app_name">Gift Ideas</string>
+    <string name="title_activity_map">Map</string>
+    <string name="places_api_key">AIzaSyBZOpHj5ov5zPUJkQzOjK8r14UEw2dplGs</string>
+    <string name="error_unknown">Oops! Something went wrong!</string>
+    <string name="label_editors_collection">Editor’s collection</string>
+    <string name="label_thematic_collections">Thematic collections</string>
+    <string name="label_for_women">For women</string>
+    <string name="label_for_men">For men</string>
+    <string name="label_hint_description">to show random gift idea</string>
+    <string name="label_hint_tap">Tap this button</string>
+
+    <string name="target_forwomen">For women</string>
+    <string name="target_formen">For men</string>
+    <string name="target_forchildren">For children</string>
+    <string name="target_hobby">Hobby and lifestyle</string>
+    <string name="target_celebration">Occasions</string>
+    <string name="target_profession">Profession</string>
+    <string name="target_housewife">Housewife</string>
+    <string name="target_photo">Photographer</string>
+    <string name="target_music">Music</string>
+    <string name="target_work">Workaholic</string>
+    <string name="target_creative">Creative</string>
+    <string name="target_cooking">Cooking lover</string>
+    <string name="target_driver">Driver</string>
+    <string name="target_fisher">Fisher</string>
+    <string name="target_hunter">Hunter</string>
+    <string name="target_itperson">IT person</string>
+    <string name="target_sport">Sportsman</string>
+    <string name="target_coffe">Coffee nerd</string>
+    <string name="target_wine">Wine connoisseur</string>
+    <string name="target_book">Bibliophile</string>
+    <string name="target_traveling">Tourist</string>
+    <string name="target_game">Gamer</string>
+    <string name="target_film">Cinephile</string>
+    <string name="target_mother">Mother</string>
+    <string name="target_mother_in_low">Mother-in-low</string>
+    <string name="target_grandmother">Grand-mother</string>
+    <string name="target_wife">Wife</string>
+    <string name="target_girlfriend">Girlfriend</string>
+    <string name="target_sister">Sister</string>
+    <string name="target_daughterinlow">Daughter-in-low</string>
+    <string name="target_daughter">Daughter</string>
+    <string name="target_aunt">Aunt</string>
+    <string name="target_friend">Friend</string>
+    <string name="target_boyfriend">Boyfriend</string>
+    <string name="target_husband">Husband</string>
+    <string name="target_brother">Brother</string>
+    <string name="target_soninlow">Son-in-low</string>
+    <string name="target_grandfather">Grandfather</string>
+    <string name="target_father">Father</string>
+    <string name="target_son">Son</string>
+    <string name="target_uncle">Uncle</string>
+    <string name="target_pal">Pa</string>
+
+
+    <string-array name="reasons">
+        <item>Him</item>
+        <item>Her</item>
+        <item>Child</item>
+        <item>Reason</item>
+        <item>Hobby and lifestyle</item>
+        <item>Professions</item>
+    </string-array>
+
+    <string name="title_activity_splash">Gift Ideas</string>
+    <string name="action_add_reminder">Add a reminder to your calendar</string>
+    <string name="action_suggest_where_to_buy">SUGGEST WHERE TO BUY?</string>
+    <string name="title_random_idea">Random gift idea \n%s</string>
+    <string name="label_random_gift_desc">Shake your phone to open the box and show the idea</string>
+</resources>
