@@ -9,7 +9,7 @@ class RandomGiftFlowCoordinator @Inject constructor (private val activity: Rando
     private val handler = Handler()
 
     fun openGift(gift: Gift) {
-        GiftDetailsActivity.start(activity, gift,0f,0f)
+        GiftDetailsActivity.start(activity, gift,GiftDetailsActivity.MIDDLE_OF_SCREEN, GiftDetailsActivity.MIDDLE_OF_SCREEN)
         activity.finish()
     }
 }

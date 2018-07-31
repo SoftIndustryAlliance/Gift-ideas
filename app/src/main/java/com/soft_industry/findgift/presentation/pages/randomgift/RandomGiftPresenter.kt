@@ -13,7 +13,7 @@ class RandomGiftPresenter @Inject constructor(val loadRandomGift: LoadRandomGift
                                               val coordinator: RandomGiftFlowCoordinator)
     : MviBasePresenter<RandomGiftView, RandomGiftViewState>() {
     override fun bindIntents() {
-        val initialVs = RandomGiftViewState(false, null, "", false, false, null)
+        val initialVs = RandomGiftViewState.createInitial()
         val loadGiftIntent = loadGiftIntent()
         val shakeIntent = shakeIntent()
 

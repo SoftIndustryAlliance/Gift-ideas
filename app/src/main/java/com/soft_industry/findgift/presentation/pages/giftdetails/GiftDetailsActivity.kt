@@ -29,6 +29,7 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
         val KEY_GIFT = "GIFT"
         val KEY_X ="X"
         val KEY_Y ="Y"
+        val MIDDLE_OF_SCREEN = Float.MIN_VALUE
         @JvmStatic
         fun start(context: Context, gift: Gift, x: Float, y: Float) {
             val intent=  Intent(context, GiftDetailsActivity::class.java)
@@ -39,10 +40,13 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
                     }
             context.startActivity(intent)
         }
-
     }
-    private var gift: Gift? = null
 
+    private var gift: Gift? = null
+    private var x = 0
+    private var y = 0
+    private var height = 0.0
+    private var width = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.do_not_move, R.anim.do_not_move)
@@ -52,6 +56,9 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
             root_details.doOnGlobalLayout { reveal() }
         }
         text_suggest_buy.setOnClickListener { gift?.let { openMapActivity(it) } }
+
+        initMetrics()
+
     }
 
     override fun createPresenter(): GiftDetailsPresenter {
@@ -64,9 +71,24 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
 
 
     override fun render(state: GiftDetailsViewState) {
-        state.apply {
-            gift?.let { renderGiftDetails(it) }
-        }
+        state.gift?.let { renderGiftDetails(it) }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        unreveal()
+    }
+
+    private fun initMetrics() {
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metrics)
+        width = metrics.widthPixels.toDouble()
+        height = metrics.heightPixels.toDouble()
+
+        val receivedX = intent.getFloatExtra(KEY_X, 0f)
+        x = (if (receivedX == MIDDLE_OF_SCREEN) width.toFloat() / 2 else receivedX).toInt()
+        val receivedY = intent.getFloatExtra(KEY_Y, 0f)
+        y = (if (receivedY == MIDDLE_OF_SCREEN) height.toFloat() / 2 else receivedY).toInt()
     }
 
     private fun openMapActivity(gift: Gift) {
@@ -89,16 +111,9 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
     private fun reveal() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val startRadius = 0f
-            val metrics = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(metrics)
-
-            val width = metrics.widthPixels.toDouble()
-            val height = metrics.heightPixels.toDouble()
             val endRadius = Math.hypot(width, height).toFloat()
-            val x = intent.getFloatExtra(KEY_X, 0f).toInt()
-            val y = intent.getFloatExtra(KEY_Y, 0f).toInt()
             root_details.visibility = View.VISIBLE
-            val anim = ViewAnimationUtils.createCircularReveal(root_details, x, y, startRadius, endRadius)
+            val anim = ViewAnimationUtils.createCircularReveal(root_details, x.toInt(), y.toInt(), startRadius, endRadius)
             anim.doOnEnd { animateContentReveal() }
             anim.start()
         } else {
@@ -124,13 +139,7 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             hideContent()
             val endRadius = 0f
-            val metrics = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(metrics)
-            val width = metrics.widthPixels.toDouble()
-            val height = metrics.heightPixels.toDouble()
             val startRadius = Math.hypot(width, height).toFloat()
-            val x = intent.getFloatExtra(KEY_X, 0f).toInt()
-            val y = intent.getFloatExtra(KEY_Y, 0f).toInt()
             val anim = ViewAnimationUtils.createCircularReveal(root_details, x, y, startRadius, endRadius)
             anim.doOnEnd {
                 root_details.visibility = View.INVISIBLE

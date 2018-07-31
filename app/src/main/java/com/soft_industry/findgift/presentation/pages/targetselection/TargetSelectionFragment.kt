@@ -89,13 +89,13 @@ class TargetSelectionFragment : MviFragment<TargetSelectionView, TargetSelection
 
 
 
-    override fun onPause() {
-        super.onPause()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         handler.removeCallbacks(hideHintEndAction)
         disposables.dispose()
 
     }
-
     override fun loadTargetListIntent() = Observable.just(true)
 
     override fun createPresenter() = presenter

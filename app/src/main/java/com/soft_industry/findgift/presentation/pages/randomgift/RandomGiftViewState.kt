@@ -7,4 +7,14 @@ data class RandomGiftViewState(val loading: Boolean,
                                val targetLabel: String,
                                val animateShake: Boolean,
                                val showGift: Boolean,
-                               val error: Throwable?)
+                               val error: Throwable?) {
+    companion object {
+        fun createInitial() = RandomGiftViewState(false,
+                        null,
+                        "",
+                        false,
+                        false,
+                        null)
+
+    }
+}

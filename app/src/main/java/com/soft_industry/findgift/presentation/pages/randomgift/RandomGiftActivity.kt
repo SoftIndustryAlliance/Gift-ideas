@@ -3,13 +3,12 @@ package com.soft_industry.findgift.presentation.pages.randomgift
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.util.Log
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
+import android.view.animation.OvershootInterpolator
 import android.view.animation.RotateAnimation
-import com.gojuno.koptional.None
 import com.gojuno.koptional.Optional
-import com.gojuno.koptional.Some
 import com.hannesdorfmann.mosby3.mvi.MviActivity
 import com.jakewharton.rxrelay2.PublishRelay
 import com.soft_industry.findgift.App
@@ -29,9 +28,13 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
     companion object {
         val GIFT_TARGET_ARG = ""
         fun start(context: Context, giftTarget: GiftTarget?) {
+            val anim = ActivityOptionsCompat.makeCustomAnimation(context, android.R.anim.fade_in, android.R.anim.fade_out)
+                    .toBundle()
             val intent=  Intent(context, RandomGiftActivity::class.java)
-                    .apply { giftTarget?.let { putExtra(GIFT_TARGET_ARG, giftTarget) } }
-            context.startActivity(intent)
+                    .apply {
+                        giftTarget?.let { putExtra(GIFT_TARGET_ARG, giftTarget) }
+                    }
+            context.startActivity(intent, anim)
         }
 
     }
@@ -65,11 +68,7 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
 
     override fun loadGiftIntent(): Observable<Optional<GiftTarget>> {
         val value = intent.getParcelableExtra<GiftTarget>(GIFT_TARGET_ARG)
-        return Observable.just(if (value == null) {
-            None
-        } else {
-            Some(value)
-        })
+        return Observable.just(Optional.toOptional(value))
     }
 
     override fun shakeIntent() = shakeRelay
@@ -79,36 +78,38 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
         renderLabel(randomGiftViewState.targetLabel)
         if (randomGiftViewState.animateShake) {
             shakeHandler.unregisterListener()
-            handleAnimation()
+
+            animateShake()
         }
 
     }
     //   internal
-    private fun handleAnimation() {
+    private fun animateShake() {
         val pivotX = image_phone_container.width / 2
         val pivotY = image_phone_container.height
-        val endAnimation = createAnimation(-10f, 0f, pivotX, pivotY) {}
-        val from = -10f
-        val to = 10f
-        val animation = createAnimation(from, to, pivotX, pivotY) {
+        val degree = 3f
+        val endAnimation = createShakeAnimation(-degree, 0f, pivotX, pivotY) {}
+        val from = -degree
+        val to = degree
+        val animation = createShakeAnimation(from, to, pivotX, pivotY) {
             image_phone_container.startAnimation(endAnimation)
         }
         animation.repeatCount = 3
         image_phone_container.startAnimation(animation)
     }
 
-    private fun createAnimation(from: Float,
-                                to: Float,
-                                pivotX: Int,
-                                pivotY: Int,
-                                action: () -> Unit)
+    private fun createShakeAnimation(from: Float,
+                                     to: Float,
+                                     pivotX: Int,
+                                     pivotY: Int,
+                                     action: () -> Unit)
             : Animation {
         return RotateAnimation(from, to, pivotX.toFloat(), pivotY.toFloat())
                 .apply {
                     repeatCount = Animation.INFINITE
                     repeatMode = Animation.REVERSE
-                    duration = 300
-                    interpolator = AccelerateInterpolator()
+                    duration = 400
+                    interpolator = OvershootInterpolator()
                     setAnimationListener(object : Animation.AnimationListener {
                         override fun onAnimationRepeat(animation: Animation?) {}
                         override fun onAnimationStart(animation: Animation?) {}
@@ -119,6 +120,7 @@ class RandomGiftActivity: MviActivity<RandomGiftView, RandomGiftPresenter>(), Ra
                     })
                 }
     }
+
 
     private fun renderLabel(targetLabel: String) {
         val label = getString(R.string.title_random_idea)
