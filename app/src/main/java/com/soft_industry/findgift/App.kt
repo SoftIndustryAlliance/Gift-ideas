@@ -1,6 +1,6 @@
 package com.soft_industry.findgift
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.soft_industry.findgift.dependencies.*
 
 /**

@@ -3,11 +3,11 @@ package com.soft_industry.findgift.presentation.pages.randomgift
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
 import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.RotateAnimation
+import androidx.core.app.ActivityOptionsCompat
 import com.gojuno.koptional.Optional
 import com.hannesdorfmann.mosby3.mvi.MviActivity
 import com.jakewharton.rxrelay2.PublishRelay

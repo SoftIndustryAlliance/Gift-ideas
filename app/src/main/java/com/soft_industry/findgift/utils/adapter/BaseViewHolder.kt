@@ -1,6 +1,6 @@
 package com.soft_industry.findgift.utils.adapter
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.extensions.LayoutContainer

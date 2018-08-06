@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: "net.ltgt.errorprone"
 
 android {
     compileSdkVersion 28
@@ -16,8 +15,8 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
     }
     buildTypes {
@@ -30,13 +29,12 @@ android {
 androidExtensions {
     experimental = true
 }
-kapt {
-    generateStubs = true
-}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.appcompat:appcompat:$support_version"
     implementation "androidx.recyclerview:recyclerview:$support_version"
     implementation "com.google.android.material:material:$support_version"
     implementation "androidx.cardview:cardview:$support_version"
@@ -62,21 +60,23 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
 
 
-    implementation 'com.hannesdorfmann.mosby3:mvi:3.1.0' // Model-View-Intent
-
-    implementation "android.arch.persistence.room:runtime:$room_version"
-    implementation "android.arch.persistence.room:rxjava2:$room_version"
-    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation 'com.hannesdorfmann.mosby3:mvi:3.1.0' exclude group: 'com.hannesdorfmann.mosby3', module: 'utils-fragment'
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     implementation 'androidx.multidex:multidex:2.0.0'
 
-    implementation 'androidx.core:core-ktx:1.0.0-beta01'
+    implementation "androidx.core:core-ktx:1.0.0-beta01"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.airbnb.android:lottie:2.5.3'
+
     implementation 'com.gojuno.koptional:koptional:1.4.0'
     implementation 'com.gojuno.koptional:koptional-rxjava2-extensions:1.4.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+
 }

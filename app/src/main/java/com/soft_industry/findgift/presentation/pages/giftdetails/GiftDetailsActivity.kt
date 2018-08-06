@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.RequiresApi
-import android.support.design.widget.Snackbar
+import androidx.annotation.RequiresApi
+import com.google.android.material.snackbar.Snackbar
 import android.transition.*
 import android.util.DisplayMetrics
 import android.view.View
@@ -74,9 +74,9 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
         state.gift?.let { renderGiftDetails(it) }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    override fun finish() {
         unreveal()
+        super.finish()
     }
 
     private fun initMetrics() {

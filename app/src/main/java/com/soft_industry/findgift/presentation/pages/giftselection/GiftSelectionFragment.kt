@@ -1,11 +1,11 @@
 package com.soft_industry.findgift.presentation.pages.giftselection
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.GridLayoutManager
 import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.soft_industry.findgift.App
 import com.soft_industry.findgift.R
@@ -15,6 +15,7 @@ import com.soft_industry.findgift.presentation.pages.giftdetails.GiftDetailsActi
 import com.soft_industry.findgift.presentation.pages.randomgift.RandomGiftActivity
 import com.soft_industry.findgift.utils.adapter.DefaultAdapter
 import com.soft_industry.findgift.utils.addDefaultTransitions
+import com.soft_industry.findgift.utils.applyArguments
 import io.reactivex.Observable
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_gift_selection.*
@@ -24,14 +25,11 @@ import javax.inject.Inject
  * Created by user on 3/23/18.
  */
 class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresenter>(), GiftSelectionView {
-    private val KEY_TARGET = "taget"
     companion object {
-        @JvmStatic fun newInstance(target: GiftTarget): GiftSelectionFragment {
-            return GiftSelectionFragment().apply {
-                addDefaultTransitions()
-                arguments = bundleOf(Pair(KEY_TARGET, target))
-            }
-        }
+        private val KEY_TARGET = "taget"
+        fun newInstance(target: GiftTarget) = GiftSelectionFragment()
+                .addDefaultTransitions()
+                .applyArguments(bundleOf(Pair(KEY_TARGET, target)))
     }
 
     private val defaultAdapter = DefaultAdapter(GiftViewHolder.Factory(this::openGiftDetails))

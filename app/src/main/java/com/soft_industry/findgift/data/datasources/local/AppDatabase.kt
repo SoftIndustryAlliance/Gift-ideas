@@ -1,7 +1,7 @@
 package com.soft_industry.findgift.data.datasources.local
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.soft_industry.findgift.data.dto.DBPopulator
 import com.soft_industry.findgift.data.dto.gifts.*
 

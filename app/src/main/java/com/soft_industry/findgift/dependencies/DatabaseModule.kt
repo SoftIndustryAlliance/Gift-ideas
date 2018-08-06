@@ -1,6 +1,6 @@
 package com.soft_industry.findgift.dependencies
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.soft_industry.findgift.data.datasources.local.AppDatabase

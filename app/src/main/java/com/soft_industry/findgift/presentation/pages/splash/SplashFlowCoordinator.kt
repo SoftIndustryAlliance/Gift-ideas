@@ -2,7 +2,7 @@ package com.soft_industry.findgift.presentation.pages.splash
 
 import android.content.Intent
 import android.os.Handler
-import android.support.v4.app.ActivityOptionsCompat
+import androidx.core.app.ActivityOptionsCompat
 import com.soft_industry.findgift.presentation.MainActivity
 import javax.inject.Inject
 

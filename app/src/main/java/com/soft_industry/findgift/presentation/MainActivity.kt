@@ -2,12 +2,12 @@ package com.soft_industry.findgift.presentation
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.transition.Explode
 import android.transition.Fade
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.view.isVisible
 import com.soft_industry.findgift.R

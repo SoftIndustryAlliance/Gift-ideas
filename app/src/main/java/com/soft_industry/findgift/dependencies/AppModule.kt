@@ -2,7 +2,6 @@ package com.soft_industry.findgift.dependencies
 
 import android.app.Application
 import android.location.LocationManager
-import androidx.core.content.systemService
 import dagger.Module
 import dagger.Provides
 
@@ -15,6 +14,6 @@ class AppModule(val application: Application) {
     fun provideContext() = application.applicationContext
 
     @Provides
-    fun provideLocationModule() = application.systemService<LocationManager>()
+    fun provideLocationModule() = application.applicationContext.getSystemService(LocationManager::class.java)
 
 }

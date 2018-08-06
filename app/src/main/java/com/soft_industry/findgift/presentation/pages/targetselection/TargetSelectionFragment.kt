@@ -2,10 +2,10 @@ package com.soft_industry.findgift.presentation.pages.targetselection
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,12 +50,7 @@ class TargetSelectionFragment : MviFragment<TargetSelectionView, TargetSelection
     private var hintVisible = false
 
     companion object {
-        @JvmStatic
-        fun create(): TargetSelectionFragment {
-            return TargetSelectionFragment().apply {
-                addDefaultTransitions()
-            }
-        }
+        fun create() = TargetSelectionFragment().addDefaultTransitions()
     }
 
 

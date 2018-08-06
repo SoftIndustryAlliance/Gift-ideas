@@ -1,8 +1,8 @@
 package com.soft_industry.findgift
 
 import android.content.Context
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.InstrumentationRegistry
+import androidx.test.runner.AndroidJUnit4
 import com.soft_industry.findgift.data.dto.gifts.GiftTargetParent
 import org.junit.Assert.assertEquals
 import org.junit.Test
