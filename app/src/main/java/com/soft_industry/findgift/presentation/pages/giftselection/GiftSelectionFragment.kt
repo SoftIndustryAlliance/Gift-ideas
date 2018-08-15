@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import com.hannesdorfmann.mosby3.mvi.MviFragment
 import com.soft_industry.findgift.App
 import com.soft_industry.findgift.R
 import com.soft_industry.findgift.domain.entities.Gift
@@ -16,7 +18,9 @@ import com.soft_industry.findgift.presentation.pages.randomgift.RandomGiftActivi
 import com.soft_industry.findgift.utils.adapter.DefaultAdapter
 import com.soft_industry.findgift.utils.addDefaultTransitions
 import com.soft_industry.findgift.utils.applyArguments
+import com.soft_industry.findgift.utils.plusAssign
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_gift_selection.*
 import javax.inject.Inject
@@ -24,7 +28,9 @@ import javax.inject.Inject
 /**
  * Created by user on 3/23/18.
  */
-class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresenter>(), GiftSelectionView {
+class GiftSelectionFragment : Fragment(), Observer<GiftSelectionState> {
+
+
     companion object {
         private val KEY_TARGET = "taget"
         fun newInstance(target: GiftTarget) = GiftSelectionFragment()
@@ -33,9 +39,11 @@ class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresen
     }
 
     private val defaultAdapter = DefaultAdapter(GiftViewHolder.Factory(this::openGiftDetails))
+    private val disposables = CompositeDisposable()
+
     private lateinit var giftTarget: GiftTarget
 
-    @Inject lateinit var presenter: GiftSelectionPresenter
+    @Inject lateinit var viewModelFactory: GiftSelectionViewModel.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity!!.application as App).component.inject(this)
@@ -46,9 +54,10 @@ class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresen
     }
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_gift_selection, container, false)
-    }
+                              savedInstanceState: Bundle?)
+            = inflater.inflate(R.layout.fragment_gift_selection, container, false)
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,20 +65,30 @@ class GiftSelectionFragment : MviFragment<GiftSelectionView, GiftSelectionPresen
         list_gifts.itemAnimator = SlideInUpAnimator()
         list_gifts.layoutManager = GridLayoutManager(context, 2)
         fab_add.setOnClickListener { RandomGiftActivity.start(context!!, giftTarget) }
+        val viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(GiftSelectionViewModel::class.java)
+        viewModel.state.observe(this, this)
+        viewModel.state.value?.let(::onChanged)
+        disposables += loadGiftList().subscribe(viewModel.input)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposables.dispose()
     }
 
 
-    override fun loadGiftList() = Observable.just(giftTarget)
-
-    override fun createPresenter() = presenter
-
-    override fun render(state: GiftSelectionViewState) {
-        state.apply {
+    override fun onChanged(state: GiftSelectionState) {
+        with(state) {
             renderLoading(loading)
             defaultAdapter.updateItems(content)
             renderError(error)
         }
     }
+
+
+    private fun loadGiftList() = Observable.just(GiftSelectionAction.LoadGiftListAction(giftTarget))
+
 
     private fun renderLoading(loading: Boolean) {
 

@@ -2,15 +2,16 @@ package com.soft_industry.findgift.presentation.pages.targetselection
 
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
-import androidx.core.view.ViewCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.core.view.doOnNextLayout
-import com.hannesdorfmann.mosby3.mvi.MviFragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxrelay2.PublishRelay
 import com.soft_industry.findgift.App
 import com.soft_industry.findgift.R
@@ -24,7 +25,6 @@ import com.soft_industry.findgift.utils.Transitions
 import com.soft_industry.findgift.utils.adapter.DefaultAdapter
 import com.soft_industry.findgift.utils.addDefaultTransitions
 import com.soft_industry.findgift.utils.plusAssign
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.fragment_target_selection.*
@@ -33,36 +33,39 @@ import javax.inject.Inject
 /**
  * Created by user on 3/23/18.
  */
-class TargetSelectionFragment : MviFragment<TargetSelectionView, TargetSelectionPresenter>(), TargetSelectionView {
+class TargetSelectionFragment : Fragment(), Observer<TargetSelectionState> {
+
+
     private lateinit var editorsAdapter: DefaultAdapter<GiftTarget>
+
     private lateinit var themedAdapter: DefaultAdapter<GiftTarget>
     private lateinit var forMenAdapter: DefaultAdapter<GiftTarget>
     private lateinit var forWomenAdapter: DefaultAdapter<GiftTarget>
-    @Inject lateinit var presenter: TargetSelectionPresenter
+    @Inject lateinit var viewModelFactory: TargetSelectionViewModelFactory
     private lateinit var handler: Handler
     private val hideHintEndAction = Runnable { hideHint() }
 
-
-
-    private val disposables = CompositeDisposable()
+    protected val actions = PublishRelay.create<TargetSelectionAction>()
+    protected val disposables = CompositeDisposable()
 
     private val hintRendererRelay = PublishRelay.create<Boolean>()
+
     private var hintVisible = false
 
     companion object {
+
         fun create() = TargetSelectionFragment().addDefaultTransitions()
     }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         (activity!!.application as App).component.inject(this)
         super.onCreate(savedInstanceState)
 
     }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_target_selection, container, false)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,11 +81,12 @@ class TargetSelectionFragment : MviFragment<TargetSelectionView, TargetSelection
         setupList(list_thematic_collection, themedAdapter)
         setupList(list_for_men, forMenAdapter)
         setupList(list_for_women, forWomenAdapter)
+
         disposables += hintRendererRelay
                 .subscribe(this::renderShowHint)
+
+        initViewModel()
     }
-
-
 
 
     override fun onDestroyView() {
@@ -91,12 +95,9 @@ class TargetSelectionFragment : MviFragment<TargetSelectionView, TargetSelection
         disposables.dispose()
 
     }
-    override fun loadTargetListIntent() = Observable.just(true)
-
-    override fun createPresenter() = presenter
 
 
-    override fun render(state: TargetSelectionViewState) {
+    override fun onChanged(state: TargetSelectionState) {
         hintRendererRelay.accept(state.showHint)
         editorsAdapter.updateItems(state.editors)
         themedAdapter.updateItems(state.thematic)
@@ -105,7 +106,13 @@ class TargetSelectionFragment : MviFragment<TargetSelectionView, TargetSelection
         renderError(state.error)
     }
 
-
+    fun initViewModel() {
+        val viewModel = ViewModelProviders.of(this, viewModelFactory)[TargetSelectionViewModel::class.java]
+        disposables += actions.subscribe(viewModel.input)
+        viewModel.state.observe(this, this)
+        viewModel.state.value?.let { onChanged(it) }
+        actions.accept(TargetSelectionAction.LoadTargetListAction)
+    }
 
     private fun setupList(listView: RecyclerView, adapter: DefaultAdapter<GiftTarget>) {
         listView.adapter = adapter

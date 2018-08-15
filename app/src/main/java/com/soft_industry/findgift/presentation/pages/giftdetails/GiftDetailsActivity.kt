@@ -4,27 +4,29 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
-import com.google.android.material.snackbar.Snackbar
 import android.transition.*
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewAnimationUtils
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.view.forEach
-import com.hannesdorfmann.mosby3.mvi.MviActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.rxrelay2.PublishRelay
 import com.soft_industry.findgift.R
 import com.soft_industry.findgift.domain.entities.Gift
 import com.soft_industry.findgift.presentation.pages.map.MapActivity
-import io.reactivex.Observable
+import com.soft_industry.findgift.utils.plusAssign
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_gift_details.*
 import java.androidx.core.content.findDrawalbeIdByName
 import java.androidx.core.view.View.doOnGlobalLayout
 
 
-class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>(), GiftDetailsView {
-
-
+class GiftDetailsActivity : AppCompatActivity(), Observer<GiftDetailsContract.State> {
     companion object {
         val KEY_GIFT = "GIFT"
         val KEY_X ="X"
@@ -47,10 +49,13 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
     private var y = 0
     private var height = 0.0
     private var width = 0.0
+    private val actions = PublishRelay.create<GiftDetailsContract.Action>()
+    private val disposables = CompositeDisposable()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         overridePendingTransition(R.anim.do_not_move, R.anim.do_not_move)
         setContentView(R.layout.activity_gift_details)
+        initModel()
         fab_close_gift.setOnClickListener { unreveal() }
         if (savedInstanceState == null) {
             root_details.doOnGlobalLayout { reveal() }
@@ -61,16 +66,11 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
 
     }
 
-    override fun createPresenter(): GiftDetailsPresenter {
-        return GiftDetailsPresenter()
+    override fun onDestroy() {
+        super.onDestroy()
+        disposables.dispose()
     }
-
-    override fun loadedIntent(): Observable<Gift> {
-        return Observable.just(intent.extras.getParcelable(KEY_GIFT))
-    }
-
-
-    override fun render(state: GiftDetailsViewState) {
+    override fun onChanged(state: GiftDetailsContract.State) {
         state.gift?.let { renderGiftDetails(it) }
     }
 
@@ -79,6 +79,14 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
         super.finish()
     }
 
+    fun initModel() {
+        val model = ViewModelProviders.of(this, GiftDetailsViewModel.Factory)[GiftDetailsViewModel::class.java]
+        model.state.observe(this, this)
+        model.state.value?.let(::onChanged)
+        disposables += actions.subscribe(model.input)
+        actions.accept(loadGiftAction())
+
+    }
     private fun initMetrics() {
         val metrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(metrics)
@@ -90,6 +98,9 @@ class GiftDetailsActivity : MviActivity<GiftDetailsView, GiftDetailsPresenter>()
         val receivedY = intent.getFloatExtra(KEY_Y, 0f)
         y = (if (receivedY == MIDDLE_OF_SCREEN) height.toFloat() / 2 else receivedY).toInt()
     }
+
+    private fun loadGiftAction() =
+            GiftDetailsContract.Action.LoadGiftAction(intent.extras.getParcelable(KEY_GIFT))
 
     private fun openMapActivity(gift: Gift) {
         MapActivity.start(this, gift)

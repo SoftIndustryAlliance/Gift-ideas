@@ -1,8 +1,13 @@
 package com.soft_industry.findgift.presentation
 
 /**
- * Created by user on 3/26/18.
+ * Reducer interface
  */
 interface StateReducer<VS> {
-    fun reduce(oldViewState: VS): VS
+    /**
+     * reducer method, which transforms old view state to new
+     * @param old old view state
+     * @return new view state
+     */
+    fun reduce(old: VS): VS
 }

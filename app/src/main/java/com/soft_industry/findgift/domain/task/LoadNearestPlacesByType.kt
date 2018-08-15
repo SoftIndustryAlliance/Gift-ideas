@@ -7,7 +7,6 @@ import com.soft_industry.findgift.domain.repository.DataRepository
 import com.soft_industry.findgift.domain.repository.LocationRepository
 import com.soft_industry.findgift.domain.repository.PlacesRepository
 import com.soft_industry.findgift.domain.repository.SettingsRepository
-import com.soft_industry.findgift.presentation.pages.map.MapViewStateReducer
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -28,11 +27,8 @@ class LoadNearestPlacesByType
                 dataRepository.loadShopTypes(gift)
                         .flatMap { requestPlaces(loc, it) }
             }
-            .map { MapViewStateReducer.LoadedNearestPlaces(it) }
-            .cast(MapViewStateReducer::class.java)
-            .startWith(MapViewStateReducer.Loading())
-            .onErrorReturn { MapViewStateReducer.Error(it) }
             .subscribeOn(Schedulers.io())
+
 
 
 

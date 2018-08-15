@@ -2,20 +2,28 @@ package com.soft_industry.findgift.utils.animations
 
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.AnimationSet
 import java.androidx.core.animation.doOnEnd
 
-class AnimationFlow private constructor(val animation: Animation, val view: View, var next: AnimationFlow? = null) {
+class AnimationFlow private constructor(val view: View, var next: AnimationFlow? = null) {
+    private val animations: AnimationSet = AnimationSet(false)
     companion object {
-        fun start(animation: Animation, view: View) = AnimationFlow(animation, view)
+        fun start(animation: Animation, view: View) = AnimationFlow(view).apply { and(animation) }
     }
-    fun then(nextAnimation: Animation, view:View): AnimationFlow {
-        val nextFlow = AnimationFlow(nextAnimation, view)
+
+    fun and(animation: Animation, view: View = this.view): AnimationFlow {
+
+        animations.addAnimation(animation)
+        return this
+    }
+    fun then(nextAnimation: Animation, view:View = this.view): AnimationFlow {
+        val nextFlow = AnimationFlow.start(nextAnimation, view)
         next = nextFlow
         return nextFlow
     }
 
     fun start() {
-        animation.doOnEnd { next?.start() }
-        view.startAnimation(animation)
+        animations.doOnEnd { next?.start() }
+        view.startAnimation(animations)
     }
 }
