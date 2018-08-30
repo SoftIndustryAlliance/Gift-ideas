@@ -7,6 +7,7 @@ import android.view.animation.Animation
 import android.view.animation.OvershootInterpolator
 import android.view.animation.RotateAnimation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -60,6 +61,15 @@ class RandomGiftActivity: AppCompatActivity(), Observer<RandomGiftState> {
                 .subscribe(actions)
         shakeHandler = ShakeHandler(this)
         shakeHandler.setOnShakeListener { shakeIntent.accept(true) }
+        image_phone_container.transitionToStart()
+        image_phone_container.setTransitionListener(object: MotionLayout.TransitionListener{
+            override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
+            }
+
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+            }
+
+        })
 
     }
 
@@ -82,6 +92,7 @@ class RandomGiftActivity: AppCompatActivity(), Observer<RandomGiftState> {
         if (state.animateShake) {
             shakeHandler.unregisterListener()
             animateShake()
+//            image_phone_container.transitionToEnd()
         }
 
     }

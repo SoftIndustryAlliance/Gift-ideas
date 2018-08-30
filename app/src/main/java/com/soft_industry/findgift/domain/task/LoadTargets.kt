@@ -14,7 +14,7 @@ class LoadTargets @Inject constructor(val dataRepository: DataRepository) {
         return Observable.concat(load(), complete())
                 .cast(TargetsViewStateReducer::class.java)
                 .onErrorReturn { TargetsViewStateReducer.Error(it) }
-                .startWith(TargetsViewStateReducer.Loading())
+                .startWith(TargetsViewStateReducer.Loading)
                 .subscribeOn(Schedulers.io())
 
     }
@@ -26,7 +26,7 @@ class LoadTargets @Inject constructor(val dataRepository: DataRepository) {
                 loadForMen())
     }
 
-    private fun complete() = Observable.just(TargetsViewStateReducer.Loaded())
+    private fun complete() = Observable.just(TargetsViewStateReducer.Loaded)
 
     private fun loadEditors() = dataRepository.loadEditors()
             .map { TargetsViewStateReducer.EditorsLoaded(it) }

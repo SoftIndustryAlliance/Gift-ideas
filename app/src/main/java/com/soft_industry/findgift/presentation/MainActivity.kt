@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         if (reveal_view.isVisible) {
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
-                val cx = reveal_view.getWidth() / 2
-                val cy = reveal_view.getHeight() / 2
+                val cx = reveal_view.width / 2
+                val cy = reveal_view.height / 2
 
                 val finalRadius = Math.hypot(cx.toDouble(), cy.toDouble()).toFloat()
                 val anim = ViewAnimationUtils.createCircularReveal(reveal_view, cx, cy, finalRadius, 0f)

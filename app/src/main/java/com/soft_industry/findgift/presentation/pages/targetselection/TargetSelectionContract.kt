@@ -22,34 +22,34 @@ data class TargetSelectionState(val loading: Boolean,
 
 
 sealed class TargetsViewStateReducer : StateReducer<TargetSelectionState> {
-    class Loading: TargetsViewStateReducer() {
+    object  Loading: TargetsViewStateReducer() {
         override fun reduce(old: TargetSelectionState) = old.copy(loading = true)
     }
 
-    class Loaded: TargetsViewStateReducer() {
+    object Loaded: TargetsViewStateReducer() {
         override fun reduce(oldVS: TargetSelectionState) = oldVS.copy(loading = false)
     }
 
-    class EditorsLoaded(val data: List<GiftTarget>): TargetsViewStateReducer() {
+    class EditorsLoaded(private val data: List<GiftTarget>): TargetsViewStateReducer() {
         override fun reduce(old: TargetSelectionState) = old.copy(editors = data)
     }
 
-    class Themed(val data: List<GiftTarget>): TargetsViewStateReducer() {
+    class Themed(private val data: List<GiftTarget>): TargetsViewStateReducer() {
         override fun reduce(old: TargetSelectionState) = old.copy(thematic = data)
     }
 
-    class ForWomen(val data: List<GiftTarget>): TargetsViewStateReducer() {
+    class ForWomen(private val data: List<GiftTarget>): TargetsViewStateReducer() {
         override fun reduce(old: TargetSelectionState) = old.copy(forwomen = data)
     }
-    class ForMen(val data: List<GiftTarget>): TargetsViewStateReducer() {
+    class ForMen(private val data: List<GiftTarget>): TargetsViewStateReducer() {
         override fun reduce(old: TargetSelectionState) = old.copy(formen = data)
     }
 
-    class DismissHint:TargetsViewStateReducer() {
+    object DismissHint:TargetsViewStateReducer() {
         override fun reduce(oldVs: TargetSelectionState) = oldVs.copy(showHint = false)
     }
 
-    class Error(val error: Throwable) : TargetsViewStateReducer() {
+    class Error(private val error: Throwable) : TargetsViewStateReducer() {
         override fun reduce(old: TargetSelectionState) = old.copy(error = error)
     }
 

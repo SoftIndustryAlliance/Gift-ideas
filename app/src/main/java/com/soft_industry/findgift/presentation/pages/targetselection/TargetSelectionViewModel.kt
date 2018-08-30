@@ -1,7 +1,7 @@
 package com.soft_industry.findgift.presentation.pages.targetselection
 
-import com.soft_industry.findgift.presentation.BaseViewModel
 import com.soft_industry.findgift.domain.task.LoadTargets
+import com.soft_industry.findgift.presentation.BaseViewModel
 import com.soft_industry.findgift.presentation.StateReducer
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -31,7 +31,7 @@ class TargetSelectionViewModel(private val loadTargets: LoadTargets, scheduler: 
     private fun dismissHint(): Observable<StateReducer<TargetSelectionState>> {
         return Observable.interval(2000, TimeUnit.MILLISECONDS)
                 .take(1)
-                .map { TargetsViewStateReducer.DismissHint() }
+                .map { TargetsViewStateReducer.DismissHint }
     }
 
 }

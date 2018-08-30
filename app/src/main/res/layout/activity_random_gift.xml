@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/violet_bg">
+    android:background="@drawable/violet_bg"
+    >
 
     <TextView
         android:id="@+id/label_random_title"
@@ -76,11 +77,11 @@
         app:layout_constraintEnd_toEndOf="@+id/image_phone_container"
         app:layout_constraintTop_toTopOf="@+id/image_phone_container" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/image_phone_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        app:layoutDescription="@xml/shake_scene"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_random_descr"
@@ -124,7 +125,7 @@
             app:layout_constraintEnd_toEndOf="@+id/image_phone"
             app:layout_constraintStart_toStartOf="@+id/image_phone" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

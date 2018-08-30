@@ -9,7 +9,7 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
-abstract open class BaseViewModel<Action,State>(scheduler: Scheduler)
+abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
     : ViewModel() {
     private val TAG = "BaseViewModel"
     private val mutableState =  MutableLiveData<State>()
