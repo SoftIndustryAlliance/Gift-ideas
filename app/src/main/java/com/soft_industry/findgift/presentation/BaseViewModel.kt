@@ -1,12 +1,13 @@
-package com.soft_industry.findgift.presentation
+package com.soft_industry.  findgift.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
+import com.soft_industry.findgift.utils.plusAssign
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
@@ -15,7 +16,8 @@ abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
     private val mutableState =  MutableLiveData<State>()
     private val initialState: State by lazy(LazyThreadSafetyMode.NONE) { createInitialState() }
     protected val viewStateObservable: Observable<State>
-    private val viewStateSubscription: Disposable
+    private val subscriptions = CompositeDisposable()
+    private val output: PublishRelay<State> = PublishRelay.create()
 
     val state: LiveData<State> = mutableState
     val input: PublishRelay<Action> = PublishRelay.create()
@@ -23,28 +25,32 @@ abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
     init {
         viewStateObservable = input
                 .observeOn(scheduler)
-                .doOnNext(::onNewActionReceived)
                 .compose { it -> it.switchMap { route(it) } }
                 .observeOn(Schedulers.computation()) //todo add named scheduler to constructor dependencies
                 .scan(initialState) { oldVs, reducer -> reducer.reduce(oldVs) }
                 .observeOn(scheduler)
                 .doOnNext (::onStateUpdated)
-        viewStateSubscription = viewStateObservable
+        subscriptions += viewStateObservable
                 .subscribe { mutableState.value = it }
 
 
     }
 
-    open fun onNewActionReceived(action: Action) {
-
-    }
     open fun onStateUpdated(state: State) {
+        output.accept(state)
+    }
 
+    fun doOnNewAction(run: (Action)-> Unit) {
+        subscriptions += input.subscribe(run)
+    }
+
+    fun doOnNewState(run: (State) -> Unit) {
+        subscriptions += output.subscribe(run)
     }
 
     override fun onCleared() {
         super.onCleared()
-        viewStateSubscription.dispose()
+        subscriptions.dispose()
     }
 
 

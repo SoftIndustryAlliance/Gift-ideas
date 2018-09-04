@@ -33,7 +33,7 @@ import javax.inject.Inject
 /**
  * Created by user on 3/23/18.
  */
-class TargetSelectionFragment : Fragment(), Observer<TargetSelectionState> {
+class TargetSelectionFragment : Fragment(), Observer<TargetSelectionState>, TargetSelectionRenderer {
 
 
     private lateinit var editorsAdapter: DefaultAdapter<GiftTarget>
@@ -98,6 +98,10 @@ class TargetSelectionFragment : Fragment(), Observer<TargetSelectionState> {
 
 
     override fun onChanged(state: TargetSelectionState) {
+        render(state)
+    }
+
+    override fun render(state: TargetSelectionState) {
         hintRendererRelay.accept(state.showHint)
         editorsAdapter.updateItems(state.editors)
         themedAdapter.updateItems(state.thematic)

@@ -20,13 +20,7 @@ class TargetSelectionViewModel(private val loadTargets: LoadTargets, scheduler: 
         }
     }
 
-    override fun createInitialState() =  TargetSelectionState(
-            false,
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
-            mutableListOf(),
-            showHint = true)
+    override fun createInitialState() =  TargetSelectionState.initial()
 
     private fun dismissHint(): Observable<StateReducer<TargetSelectionState>> {
         return Observable.interval(2000, TimeUnit.MILLISECONDS)

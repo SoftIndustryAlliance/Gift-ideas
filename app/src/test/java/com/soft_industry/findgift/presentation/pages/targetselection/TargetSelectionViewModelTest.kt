@@ -1,67 +1,97 @@
 package com.soft_industry.findgift.presentation.pages.targetselection
 
-import androidx.lifecycle.Observer
-import com.jakewharton.rxrelay2.PublishRelay
+import com.nhaarman.mockitokotlin2.reset
+import com.nhaarman.mockitokotlin2.verify
+import com.soft_industry.findgift.MockMainLooper
+import com.soft_industry.findgift.data.repository.TestDataRepositoryImpl
 import com.soft_industry.findgift.domain.entities.Gift
 import com.soft_industry.findgift.domain.entities.GiftTarget
-import com.soft_industry.findgift.domain.repository.DataRepository
 import com.soft_industry.findgift.domain.task.LoadTargets
-import io.reactivex.Observable
+import com.soft_industry.findgift.mock
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
-
-val defaultTarget = Observable.just(listOf(GiftTarget(1L, 1, "test")))
-val gifts = Observable.just(listOf(Gift(1L, "test", "test", "test")))
-val randomGift = Observable.just(Gift(1L, "test", "test", "test"))
-val shopTypes = Observable.just<List<String>>(listOf())
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.on
 
 class TargetSelectionViewModelTest: Spek({
-    describe("Target selection viewmodel") {
-        val vm = TargetSelectionViewModel(LoadTargets(DummyDataRepository), Schedulers.trampoline())
-        val states = PublishRelay.create<TargetSelectionState>()
-        val testObserver = Observer<TargetSelectionState> { states.accept(it) }
-        vm.state.observeForever(testObserver)
-
-        context("LoadTargetListAction") {
-            vm.input.accept(TargetSelectionAction.LoadTargetListAction)
-            it("Should  dismiss hint, show content loading ") {
-                states.test()
-                        .assertValues()
-
+    given("Target selection view model") {
+        MockMainLooper()
+        var (renderer, robot) = setup()
+        beforeEachTest {
+            reset(renderer)
+        }
+        on("LoadTargetListAction") {
+            robot.loadTargetList()
+            val stateUpdater = StateUpdater(TargetSelectionState.initial())
+            it("should show initial state ") {
+                verify(renderer).render(stateUpdater.updateAndGet(showHint = false))
             }
+
+            it("should show hint ") {
+                verify(renderer).render(stateUpdater.updateAndGet(showHint = false))
+            }
+            it("should show loading ") {
+                verify(renderer).render(stateUpdater.updateAndGet(loading = true))
+            }
+            it("should show editors") {
+                verify(renderer).render(stateUpdater.updateAndGet(editors = defaultTarget))
+            }
+            it("should show thematic") {
+                verify(renderer).render(stateUpdater.updateAndGet(thematic = defaultTarget))
+            }
+            it("should show for women") {
+                verify(renderer).render(stateUpdater.updateAndGet(forwomen = defaultTarget))
+            }
+            it("should show for men") {
+                verify(renderer).render(stateUpdater.updateAndGet(formen = defaultTarget))
+            }
+            it("should finish loading") {
+                verify(renderer).render(stateUpdater.updateAndGet(loading = false))
+            }
+
+            it("should dismiss hint") {
+                verify(renderer).render(stateUpdater.updateAndGet(showHint = false))
+            }
+
         }
     }
 })
 
-object DummyDataRepository: DataRepository {
+fun setup(): Pair<TargetSelectionRenderer, TargetSelectionRobot> {
+    val renderer: TargetSelectionRenderer = mock()
+    val testScheduler = Schedulers.trampoline()
+    RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
+    RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
+    RxJavaPlugins.setNewThreadSchedulerHandler { Schedulers.trampoline() }
+    val dataRepository = TestDataRepositoryImpl()
+    val vm = TargetSelectionViewModel(LoadTargets(dataRepository), testScheduler)
+    vm.state.observeForever { renderer.render(it) }
+    val robot = TargetSelectionRobot(dataRepository, vm)
+    return Pair(renderer, robot)
+}
 
-    override fun loadEditors(): Observable<List<GiftTarget>> {
-        return defaultTarget
-    }
 
-    override fun loadThematic(): Observable<List<GiftTarget>> {
-        return defaultTarget
-    }
 
-    override fun loadForWomen(): Observable<List<GiftTarget>> {
-        return defaultTarget
-    }
+/**
+ * these actions needed in order to avoid Looper.getMainLooper() not mocked exception
+ */
 
-    override fun loadForMen(): Observable<List<GiftTarget>> {
-        return defaultTarget
-    }
 
-    override fun loadGifts(giftTarget: GiftTarget): Observable<List<Gift>> {
-        return gifts
 
-    }
 
-    override fun loadRandomGift(giftTarget: GiftTarget?): Observable<Gift> {
-        return randomGift
-    }
 
-    override fun loadShopTypes(gift: Gift): Observable<List<String>> {
-        return shopTypes
+class StateUpdater(var state: TargetSelectionState) {
+    fun updateAndGet(loading: Boolean = state.loading,
+                     editors: List<GiftTarget> = state.editors,
+                     thematic: List<GiftTarget> = state.thematic,
+                     forwomen: List<GiftTarget> = state.forwomen,
+                     formen: List<GiftTarget> = state.formen,
+                     error: Throwable? = state.error,
+                     showHint: Boolean = state.showHint): TargetSelectionState {
+        state = TargetSelectionState(loading, editors, thematic, forwomen, formen, error, showHint)
+        return state
     }
 }
+

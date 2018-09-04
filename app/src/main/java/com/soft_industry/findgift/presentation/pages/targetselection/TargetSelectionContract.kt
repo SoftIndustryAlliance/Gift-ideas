@@ -18,8 +18,22 @@ data class TargetSelectionState(val loading: Boolean,
                                 val forwomen: List<GiftTarget>,
                                 val formen: List<GiftTarget>,
                                 val error: Throwable? = null,
-                                val showHint: Boolean)
+                                val showHint: Boolean) {
+    companion object {
+        fun initial() =
+                TargetSelectionState(
+                        false,
+                        mutableListOf(),
+                        mutableListOf(),
+                        mutableListOf(),
+                        mutableListOf(),
+                        showHint = true)
+    }
+}
 
+interface TargetSelectionRenderer {
+    fun render(state: TargetSelectionState)
+}
 
 sealed class TargetsViewStateReducer : StateReducer<TargetSelectionState> {
     object  Loading: TargetsViewStateReducer() {
