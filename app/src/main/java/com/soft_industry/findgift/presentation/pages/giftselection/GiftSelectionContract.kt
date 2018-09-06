@@ -8,6 +8,9 @@ data class GiftSelectionState(val loading: Boolean,
                              val content: List<Gift>,
                              val error: Throwable? = null)
 
+interface GiftSelectionRenderer {
+    fun render(state: GiftSelectionState)
+}
 sealed class GiftSelectionAction {
     data class LoadGiftListAction(val giftTarget: GiftTarget): GiftSelectionAction()
 }

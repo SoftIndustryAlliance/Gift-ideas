@@ -2,9 +2,9 @@ package com.soft_industry.findgift.presentation.pages.giftselection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.soft_industry.findgift.presentation.BaseViewModel
 import com.soft_industry.findgift.dependencies.RenderScheduler
 import com.soft_industry.findgift.domain.task.LoadGifts
+import com.soft_industry.findgift.presentation.BaseViewModel
 import com.soft_industry.findgift.presentation.StateReducer
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -38,7 +38,7 @@ class GiftSelectionViewModel (private val loadGifts: LoadGifts, private val sche
                 .startWith(GiftSelectionReducer.Loading())
 
 
-    override fun createInitialState() = GiftSelectionState(true, mutableListOf())
+    override fun createInitialState() = GiftSelectionState(true, listOf())
 }
 
 

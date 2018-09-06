@@ -5,6 +5,10 @@ import androidx.arch.core.executor.TaskExecutor
 import org.mockito.Mockito
 
 inline fun <reified T : Any> mock(): T = Mockito.mock(T::class.java)
+/**
+ * these actions needed in order to avoid Looper.getMainLooper() not mocked exception
+ */
+
 fun MockMainLooper() {
     ArchTaskExecutor.getInstance().setDelegate(object : TaskExecutor() {
         override fun executeOnDiskIO(runnable: Runnable) {

@@ -28,7 +28,8 @@ import javax.inject.Inject
 /**
  * Created by user on 3/23/18.
  */
-class GiftSelectionFragment : Fragment(), Observer<GiftSelectionState> {
+class GiftSelectionFragment : Fragment(), Observer<GiftSelectionState>, GiftSelectionRenderer {
+
 
 
     companion object {
@@ -79,6 +80,10 @@ class GiftSelectionFragment : Fragment(), Observer<GiftSelectionState> {
 
 
     override fun onChanged(state: GiftSelectionState) {
+        render(state)
+    }
+
+    override fun render(state: GiftSelectionState) {
         with(state) {
             renderLoading(loading)
             defaultAdapter.updateItems(content)
