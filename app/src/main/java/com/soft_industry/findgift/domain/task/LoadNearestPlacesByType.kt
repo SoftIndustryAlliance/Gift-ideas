@@ -23,7 +23,7 @@ class LoadNearestPlacesByType
     fun execute(gift: Gift) = locationRepository.listen()
             .take(1)
             .observeOn(Schedulers.io())
-            .switchMap { loc ->
+            .concatMap { loc ->
                 dataRepository.loadShopTypes(gift)
                         .flatMap { requestPlaces(loc, it) }
             }
@@ -38,15 +38,11 @@ class LoadNearestPlacesByType
 
     }
 
-    private fun loadPlaces(types: List<String>, latlng: LatLng, lang: Locale): Observable<MutableList<NearestPlace>>? {
+    private fun loadPlaces(types: List<String>, latlng: LatLng, lang: Locale): Observable<List<NearestPlace>> {
         return Observable.fromIterable(types)
-                .flatMap { placesRepository.loadNearestPlaces(it, latlng, lang.language) }
+                .concatMap { placesRepository.loadNearestPlaces(it, latlng, lang.language) }
                 .observeOn(Schedulers.computation())
-                .reduce(mutableListOf<NearestPlace>()) { list, items ->
-                    list.addAll(items)
-                    return@reduce list
-                }
-                .toObservable()
+
     }
 
 }

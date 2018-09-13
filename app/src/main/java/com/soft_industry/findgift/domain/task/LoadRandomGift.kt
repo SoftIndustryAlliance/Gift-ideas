@@ -9,7 +9,5 @@ import javax.inject.Inject
 class LoadRandomGift @Inject constructor(val dataRepository: DataRepository) {
     fun execute(giftTarget: GiftTarget?): Observable<Gift> {
         return dataRepository.loadRandomGift(giftTarget)
-
-
     }
 }

@@ -4,17 +4,16 @@ import com.soft_industry.findgift.domain.entities.Gift
 import com.soft_industry.findgift.domain.entities.GiftTarget
 import com.soft_industry.findgift.domain.repository.DataRepository
 import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.ReplaySubject
 
 class TestDataRepositoryImpl : DataRepository {
-    val editors =  BehaviorSubject.create<List<GiftTarget>>()
-    val thematic =  PublishSubject.create<List<GiftTarget>>()
-    val forwomen =  PublishSubject.create<List<GiftTarget>>()
-    val formen =  PublishSubject.create<List<GiftTarget>>()
-    val gifts = PublishSubject.create<List<Gift>>()
-    val randomGift = PublishSubject.create<Gift>()
-    val shoptypes = PublishSubject.create<List<String>>()
+    val editors =  ReplaySubject.create<List<GiftTarget>>()
+    val thematic =  ReplaySubject.create<List<GiftTarget>>()
+    val forwomen =  ReplaySubject.create<List<GiftTarget>>()
+    val formen =  ReplaySubject.create<List<GiftTarget>>()
+    val gifts = ReplaySubject.create<List<Gift>>()
+    val randomGift = ReplaySubject.create<Gift>()
+    val shoptypes = ReplaySubject.create<List<String>>()
 
     override fun loadEditors(): Observable<List<GiftTarget>> {
        return editors

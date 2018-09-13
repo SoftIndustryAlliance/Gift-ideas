@@ -21,7 +21,7 @@ sealed class MapAction {
 sealed class MapReducer: StateReducer<MapState> {
     class LoadedNearestPlaces(val data: List<NearestPlace>): MapReducer() {
         override fun reduce(old: MapState)
-                = old.copy(loading = false, places = data, error = null)
+                = old.copy(loading = false, places = old.places?: listOf<NearestPlace>() + data, error = null)
     }
     class Error(val error: Throwable) :MapReducer(){
         override fun reduce(old: MapState)

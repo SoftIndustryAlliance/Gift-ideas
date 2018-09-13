@@ -6,6 +6,7 @@ import com.soft_industry.findgift.MockMainLooper
 import com.soft_industry.findgift.data.repository.TestDataRepositoryImpl
 import com.soft_industry.findgift.domain.entities.GiftTarget
 import com.soft_industry.findgift.domain.task.LoadTargets
+import com.soft_industry.findgift.domain.task.robot.defaultTargets
 import com.soft_industry.findgift.mock
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
