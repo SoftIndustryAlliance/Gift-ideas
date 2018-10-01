@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.soft_industry.findgift.App
 import com.soft_industry.findgift.R
@@ -21,7 +22,6 @@ import com.soft_industry.findgift.utils.applyArguments
 import com.soft_industry.findgift.utils.plusAssign
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.fragment_gift_selection.*
 import javax.inject.Inject
 
@@ -63,7 +63,7 @@ class GiftSelectionFragment : Fragment(), Observer<GiftSelectionState>, GiftSele
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list_gifts.adapter = defaultAdapter
-        list_gifts.itemAnimator = SlideInUpAnimator()
+        list_gifts.itemAnimator = DefaultItemAnimator() //todo add slide in animation for androidx
         list_gifts.layoutManager = GridLayoutManager(context, 2)
         fab_add.setOnClickListener { RandomGiftActivity.start(context!!, giftTarget) }
         val viewModel = ViewModelProviders.of(this, viewModelFactory)

@@ -35,18 +35,14 @@ class RandomGiftViewModel(
         return  Observable.concat(labelObservable(taget), loadRandomGift(taget))
     }
 
-    private fun loadRandomGift(taget: Optional<GiftTarget>): Observable<RandomGiftReducer> {
-        return loadRandomGift.execute(taget.toNullable())
-                .map { RandomGiftReducer.LoadingSucceded(it) }
-                .cast(RandomGiftReducer::class.java)
+    private fun loadRandomGift(taget: Optional<GiftTarget>) = loadRandomGift.execute(taget.toNullable())
+                .map<RandomGiftReducer> { RandomGiftReducer.LoadingSucceded(it) }
                 .startWith(RandomGiftReducer.Loading)
                 .subscribeOn(Schedulers.io())
-    }
 
-    private fun shakeIntent()
-            : Observable<StateReducer<RandomGiftState>>
-            = Observable.just(RandomGiftAction.ShakeAction)
-            .flatMap { Observable.concat(animate(), openGift()) }
+
+    private fun shakeIntent() = Observable.just(RandomGiftAction.ShakeAction)
+            .flatMap<StateReducer<RandomGiftState>> { Observable.concat(animate(), openGift()) }
 
     private fun openGift(): Observable<RandomGiftReducer> {
         return Observable.interval(2000, TimeUnit.MILLISECONDS)

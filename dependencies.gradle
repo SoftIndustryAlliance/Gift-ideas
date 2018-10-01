@@ -1,0 +1,112 @@
+ext.versions = [
+        agp                    : '3.2.0', //needed for androidx
+        buildTools             : '27.0.3',
+        compileSdk             : 27,
+        targetSdk              : 26,
+        minSdk                 : 14,
+
+
+        kotlin_version : "1.2.51",
+        errorProne : "0.0.13",
+
+        lifecycle_version : '2.0.0',
+        play_services_version : '15.0.1',
+        room_version : '2.0.0-rc01',
+        dagger : '2.14.1',
+        support_version : '1.0.0',
+        constraintlayout : "2.0.0-alpha2",
+
+        koptional: "1.4.0",
+        coreKtx : "1.0.0",
+        recyclerviewAnimators : "2.3.0",
+        retrofit : "2.4.0",
+        rxjava : "2.2.2",
+        rxbinding : "2.1.1",
+        rxrelay : "2.1.0",
+        rxandroid : "2.1.0",
+        rxpermissions : "0.9.5@aar",
+
+        multidex : "2.0.0",
+
+        picasso : "2.71828",
+
+        coreTesting : "1.1.1",
+        junit : "4.12",
+        runner : "1.1.0-alpha4",
+        espressoCore : "3.1.0-alpha4",
+        spekApi : "1.2.0",
+        junitPlatformRunner : "1.0.1",
+        mockitoCore : "2.19",
+        mockitoKotlin : "2.0.0-RC1",
+        supportRunner : "1.0.2",
+
+]
+
+ext.libraries = [
+
+        kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin_version",
+        playServicesPlaces : "com.google.android.gms:play-services-places:$versions.play_services_version",
+        playServicesMaps : "com.google.android.gms:play-services-maps:$versions.play_services_version",
+        playServicesLocation : "com.google.android.gms:play-services-location:$versions.play_services_version",
+
+        lifecycleExtensions : "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle_version",
+        lifecycleViewmodel : "androidx.lifecycle:lifecycle-viewmodel:$versions.lifecycle_version",
+        lifecycleLivedata : "androidx.lifecycle:lifecycle-livedata:$versions.lifecycle_version",
+        lifecycleRuntime : "androidx.lifecycle:lifecycle-runtime:..lifecycle_version",
+
+        roomRuntime : "androidx.room:room-runtime:$versions.room_version",
+        roomRxjava2 : "androidx.room:room-rxjava2:$versions.room_version",
+        roomCompiler : "androidx.room:room-compiler:$versions.room_version",
+
+        coreKtx : "androidx.core:core-ktx:$versions.coreKtx",
+
+        koptional : "com.gojuno.koptional:koptional:$versions.koptional",
+
+        dagger : "com.google.dagger:dagger:$versions.dagger",
+        daggerCompiler : "com.google.dagger:dagger-compiler:$versions.dagger",
+
+
+        retrofit : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        converterGson : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        adapterRxjava2 : "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",
+
+        rxjava : "io.reactivex.rxjava2:rxjava:$versions.rxjava",
+        rxbinding : "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding",
+        rxrelay : "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay",
+        rxandroid : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
+        rxpermissions : "com.tbruyelle.rxpermissions2:rxpermissions:$versions.rxpermissions",
+
+        multidex : "androidx.multidex:multidex:$versions.multidex",
+        picasso : "com.squareup.picasso:picasso:$versions.picasso",
+]
+
+
+ext.supportLibraries = [
+        appcompat  : "androidx.appcompat:appcompat:$versions.support_version",
+        recyclerview : "androidx.recyclerview:recyclerview:$versions.support_version",
+        material : "com.google.android.material:material:$versions.support_version",
+        cardview : "androidx.cardview:cardview:$versions.support_version",
+        constraintlayout : "androidx.constraintlayout:constraintlayout:$versions.constraintlayout",
+]
+
+
+ext.testLibraries = [
+        coreTesting : "android.arch.core:core-testing:$versions.coreTesting",
+        junit : "junit:junit:$versions.junit",
+        runner : "androidx.test:runner:$versions.runner",
+        espressoCore : "androidx.test.espresso:espresso-core:$versions.espressoCore",
+        kotlinTest : "org.jetbrains.kotlin:kotlin-test:$versions.kotlin_version",
+        spekApi : "org.jetbrains.spek:spek-api:$versions.spekApi",
+        spekJunitPlatformEngine : "org.jetbrains.spek:spek-junit-platform-engine:$versions.spekApi",
+        junitPlatformRunner : "org.junit.platform:junit-platform-runner:$versions.junitPlatformRunner",
+        mockitoCore : "org.mockito:mockito-core:$versions.mockitoCore",
+        mockitoKotlin : "com.nhaarman.mockitokotlin2:mockito-kotlin:$versions.mockitoKotlin",
+        supportRunner : "com.android.support.test:runner:$versions.supportRunner",
+]
+
+
+ext.gradlePlugins = [
+        android    : "com.android.tools.build:gradle:$versions.agp",
+        kotlin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin_version",
+        errorProne : "net.ltgt.gradle:gradle-errorprone-plugin:$versions.errorProne"
+]

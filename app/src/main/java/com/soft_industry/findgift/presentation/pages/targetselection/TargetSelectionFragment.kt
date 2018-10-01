@@ -10,6 +10,7 @@ import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxrelay2.PublishRelay
@@ -26,7 +27,6 @@ import com.soft_industry.findgift.utils.adapter.DefaultAdapter
 import com.soft_industry.findgift.utils.addDefaultTransitions
 import com.soft_industry.findgift.utils.plusAssign
 import io.reactivex.disposables.CompositeDisposable
-import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.android.synthetic.main.fragment_target_selection.*
 import javax.inject.Inject
 
@@ -120,7 +120,7 @@ class TargetSelectionFragment : Fragment(), Observer<TargetSelectionState>, Targ
 
     private fun setupList(listView: RecyclerView, adapter: DefaultAdapter<GiftTarget>) {
         listView.adapter = adapter
-        listView.itemAnimator = SlideInRightAnimator()
+        listView.itemAnimator = DefaultItemAnimator() //todo add slide in animation for androidx
         listView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
