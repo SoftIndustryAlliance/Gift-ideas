@@ -24,11 +24,11 @@ abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
 
     init {
         viewStateObservable = input
-                .observeOn(scheduler)
+                .observeOn(scheduler) //в роуте мы можем работать с какими-то данными зависимыми от мейн треда, но лучше не надо :)
                 .compose { it -> it.switchMap { route(it) } }
-                .observeOn(Schedulers.computation()) //todo add named scheduler to constructor dependencies
+                .observeOn(Schedulers.computation()) //здесь может быть вычисление сложного диффа, делаем на компьютейшен
                 .scan(initialState) { oldVs, reducer -> reducer.reduce(oldVs) }
-                .observeOn(scheduler)
+                .observeOn(scheduler) //дальше мы рендерим на мейн треде
                 .doOnNext (::onStateUpdated)
         subscriptions += viewStateObservable
                 .subscribe { mutableState.value = it }

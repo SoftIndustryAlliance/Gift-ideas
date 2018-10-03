@@ -23,24 +23,23 @@ class LoadNearestPlacesByType
     fun execute(gift: Gift) = locationRepository.listen()
             .take(1)
             .observeOn(Schedulers.io())
-            .concatMap { loc ->
-                dataRepository.loadShopTypes(gift)
-                        .flatMap { requestPlaces(loc, it) }
+            .concatMap { loc ->  //concatMap -используем что бы последовательно создать следующий обзервабл используя результат предыдущего
+                dataRepository.loadShopTypes(gift)  //создаем обзевабл получения тайпов
+                        .flatMap { requestPlaces(loc, it) }  // делаем это здесь, а не в следующей цепочке так как у нас есть результаты и получения локации и  получения тайпов
             }
-            .subscribeOn(Schedulers.io())
 
 
 
 
     private fun requestPlaces(latlng: LatLng, types: List<String>): Observable<List<NearestPlace>>{
-        return settingsRepository.loadUserLanguage()
+        return settingsRepository.loadUserLanguage() //сперва получим язык (Реактивненько конечно
                 .flatMap { lang -> loadPlaces(types, latlng, lang) }
 
     }
 
     private fun loadPlaces(types: List<String>, latlng: LatLng, lang: Locale): Observable<List<NearestPlace>> {
-        return Observable.fromIterable(types)
-                .concatMap { placesRepository.loadNearestPlaces(it, latlng, lang.language) }
+        return Observable.fromIterable(types) //обрабатываем каждый тайп
+                .concatMap { placesRepository.loadNearestPlaces(it, latlng, lang.language) } // concatMap -последовательно
                 .observeOn(Schedulers.computation())
 
     }
