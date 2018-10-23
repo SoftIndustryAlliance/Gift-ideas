@@ -14,10 +14,10 @@ class SettingsRepositoryImpl @Inject constructor(val context: Context) :Settings
     val USER_PREFS = "USER_PREFS"
     val USER_LOCALE = "USER_LOCALE"
     override fun loadUserLanguage(): Observable<Locale> {
-        return Observable.just(
-                context.applicationContext
+        val localeStr = context.applicationContext
                 .getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE)
-                .getString(USER_LOCALE, Locale.getDefault().displayLanguage))
+                .getString(USER_LOCALE, Locale.getDefault().displayLanguage)
+        return Observable.just(localeStr)
                 .map { Locale(it) }
 
     }
