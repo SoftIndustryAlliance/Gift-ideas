@@ -9,7 +9,6 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.http.Body
 
 abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
     : ViewModel() {
