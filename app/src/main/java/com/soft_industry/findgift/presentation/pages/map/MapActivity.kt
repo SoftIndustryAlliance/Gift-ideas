@@ -95,7 +95,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, Observer<MapState> 
 
     // internal methods
     private fun renderPoints(points: List<NearestPlace>) {
-        Observable.fromIterable(points)
+        disposables += Observable.fromIterable(points)
                 .map(this::toMarkerOptions)
                 .subscribe { mMap.addMarker(it) }
         points.firstOrNull()

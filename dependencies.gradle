@@ -21,7 +21,7 @@ ext.versions = [
         recyclerviewAnimators : "2.3.0",
         retrofit : "2.4.0",
         rxjava : "2.2.2",
-        rxbinding : "2.1.1",
+        rxbinding : "3.0.0-alpha1",
         rxrelay : "2.1.0",
         rxandroid : "2.1.0",
         rxpermissions : "0.9.5@aar",
@@ -39,6 +39,8 @@ ext.versions = [
         mockitoCore : "2.19",
         mockitoKotlin : "2.0.0-RC1",
         supportRunner : "1.0.2",
+        domic : "development",
+        rxKotlin: "2.3.0"
 
 ]
 
@@ -71,11 +73,11 @@ ext.libraries = [
         adapterRxjava2 : "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit",
 
         rxjava : "io.reactivex.rxjava2:rxjava:$versions.rxjava",
-        rxbinding : "com.jakewharton.rxbinding2:rxbinding:$versions.rxbinding",
+        rxbinding : "com.jakewharton.rxbinding3:rxbinding:$versions.rxbinding",
         rxrelay : "com.jakewharton.rxrelay2:rxrelay:$versions.rxrelay",
         rxandroid : "io.reactivex.rxjava2:rxandroid:$versions.rxandroid",
         rxpermissions : "com.tbruyelle.rxpermissions2:rxpermissions:$versions.rxpermissions",
-
+        rxKotlin : "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin",
         multidex : "androidx.multidex:multidex:$versions.multidex",
         picasso : "com.squareup.picasso:picasso:$versions.picasso",
 ]
@@ -89,6 +91,13 @@ ext.supportLibraries = [
         constraintlayout : "androidx.constraintlayout:constraintlayout:$versions.constraintlayout",
 ]
 
+
+ext.domic = [
+        android: "com.lyft.domic:android:$versions.domic",
+        api: "com.lyft.domic:api:$versions.domic",
+        test: "com.lyft.domic:test:$versions.domic",
+        util: "com.lyft.domic:util:$versions.domic"
+]
 
 ext.testLibraries = [
         coreTesting : "android.arch.core:core-testing:$versions.coreTesting",

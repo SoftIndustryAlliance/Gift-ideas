@@ -59,6 +59,7 @@ dependencies {
     implementation libraries.rxrelay
     implementation libraries.rxandroid
     implementation libraries.rxpermissions
+    implementation libraries.rxKotlin
     implementation libraries.multidex
     implementation libraries.picasso
 }
@@ -72,6 +73,14 @@ dependencies {
     implementation supportLibraries.material
     implementation supportLibraries.constraintlayout
 }
+
+dependencies {
+    implementation domic.android
+    implementation domic.api
+    implementation domic.test
+    implementation domic.util
+}
+
 
 dependencies {
 
