@@ -65,3 +65,5 @@ abstract class BaseViewModel<Action,State>(scheduler: Scheduler)
     abstract fun route(action: Action): Observable<StateReducer<State>>
     abstract fun createInitialState(): State
 }
+
+data class AppSchedulers(val render: Scheduler, val io: Scheduler, val computation: Scheduler)

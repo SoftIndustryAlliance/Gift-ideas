@@ -17,7 +17,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument "runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder"
         multiDexEnabled true
-
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -98,5 +98,12 @@ dependencies {
     androidTestImplementation testLibraries.supportRunner
     androidTestRuntimeOnly "de.mannodermaus.junit5:android-instrumentation-test-runner:$junit5_runner"
 
+    compile 'com.facebook.android:facebook-places:[4,5)'
 
+}
+
+dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-alpha1'
+    implementation 'com.google.android.material:material:1.0.0-alpha1'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha1'
 }

@@ -1,9 +1,9 @@
 package com.soft_industry.findgift.dependencies
 
-import com.soft_industry.findgift.data.repository.DataRepositoryImpl
-import com.soft_industry.findgift.data.repository.GooglePlacesRepository
-import com.soft_industry.findgift.data.repository.LocationRepositoryImpl
-import com.soft_industry.findgift.data.repository.SettingsRepositoryImpl
+import com.soft_industry.findgift.data.instruments.NavigationImpl
+import com.soft_industry.findgift.data.instruments.NavigationImpl_Factory
+import com.soft_industry.findgift.data.repository.*
+import com.soft_industry.findgift.domain.instruments.Navigation
 import com.soft_industry.findgift.domain.repository.DataRepository
 import com.soft_industry.findgift.domain.repository.LocationRepository
 import com.soft_industry.findgift.domain.repository.PlacesRepository
@@ -27,7 +27,7 @@ import dagger.Provides
     }
 
     @Provides
-    fun providPlacesRepository(placesRepository: GooglePlacesRepository): PlacesRepository {
+    fun providPlacesRepository(placesRepository: FacebookPlacesRepository): PlacesRepository {
         return placesRepository
     }
 
@@ -36,4 +36,6 @@ import dagger.Provides
         return settingsRepository
     }
 
+    @Provides
+    fun provideNavigation(navigation : NavigationImpl) : Navigation = navigation
 }

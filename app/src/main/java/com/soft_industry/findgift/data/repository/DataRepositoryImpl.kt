@@ -53,6 +53,7 @@ class DataRepositoryImpl @Inject constructor(val context: Context, val dataDao: 
         return dataDao.getGiftShopsForGift(gift.id)
                 .toObservable()
                 .map { it.map { it.label } }
+                .map { it.takeIf { !it.isEmpty() } ?: listOf("book_store") }
     }
 
     override fun loadRandomGift(giftTarget: GiftTarget?): Observable<Gift> {

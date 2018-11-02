@@ -3,7 +3,7 @@ package com.soft_industry.findgift.presentation.pages.map
 import android.annotation.SuppressLint
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
 import com.jakewharton.rxrelay2.PublishRelay
 import com.lyft.domic.android.AndroidView
@@ -18,17 +18,17 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.Observables
 
-interface MapBinder {
+interface MapBinder : Disposable{
 
     val stateRenderer: Consumer<MapState>
-    val placeNavigationRequested: Observable<NearestPlace>
+    val showNearestPlaceDetails: Observable<NearestPlace>
 
     @SuppressLint("MissingPermission")
-    class Impl(mapFragment: MapFragment, root: android.view.View, renderer: Renderer)
-        : MapBinder, Disposable {
+    class Impl(mapFragment: SupportMapFragment, root: android.view.View, renderer: Renderer)
+        : MapBinder {
 
         override val stateRenderer = PublishRelay.create<MapState>()
-        override val placeNavigationRequested = PublishRelay.create<NearestPlace>()
+        override val showNearestPlaceDetails = PublishRelay.create<NearestPlace>()
 
         private val disposable = CompositeDisposable()
         private val mapInitialized = PublishRelay.create<GoogleMap>()
@@ -44,16 +44,22 @@ interface MapBinder {
             }
         }
         private val loadingView = AndroidView(root.findViewById(R.id.pb_shops_loading), renderer)
-
         private val placesRenderer = Observables.combineLatest(mapInitialized, places)
 
         init {
             mapFragment.getMapAsync(mapInitialized::accept)
+            disposable += loadingView.change.visibility(loading)
+
             disposable += mapInitialized.subscribe { map ->
                 map.isMyLocationEnabled = true
                 map.moveCamera(CameraUpdateFactory.zoomTo(15f))
+                map.setOnMarkerClickListener { marker->
+                    marker.tag
+                        ?.takeIf { it is NearestPlace }
+                        ?.let { showNearestPlaceDetails.accept(it as NearestPlace) }
+                    true
+                }
             }
-            disposable += loadingView.change.visibility(loading)
             disposable += placesRenderer.subscribe { (map, place) ->
                 val marker  = map.addMarker(place.asMarker())
                 marker.tag = place

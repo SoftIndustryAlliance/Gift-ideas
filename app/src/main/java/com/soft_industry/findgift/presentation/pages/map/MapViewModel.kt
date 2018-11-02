@@ -22,15 +22,8 @@ class MapViewModel(private val loadNearestPlacesByType: LoadNearestPlacesByType,
     override fun route(action: MapAction): Observable<StateReducer<MapState>> {
         return when(action){
             is MapAction.LoadPlacesForGiftAction -> loadPlaces(action.gift)
-            is MapAction.NavigateTo -> navigate(action)
         }
     }
-
-    private fun navigate(action: MapAction.NavigateTo) =
-            openNavigation.execute(action.location)
-                    .toObservable<StateReducer<MapState>>()
-                    .onErrorReduceState { vs, err -> vs.copy(error = err) }
-
     private fun loadPlaces(gift: Gift): Observable<StateReducer<MapState>> {
         return loadNearestPlacesByType.execute(gift)
                 .map<StateReducer<MapState>> { MapReducer.LoadedNearestPlaces(it) }

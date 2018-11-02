@@ -17,7 +17,6 @@ data class MapState(val loading: Boolean,
 
 sealed class MapAction {
     data class LoadPlacesForGiftAction(val gift: Gift) : MapAction()
-    data class NavigateTo(val location :LatLng) : MapAction()
 }
 
 

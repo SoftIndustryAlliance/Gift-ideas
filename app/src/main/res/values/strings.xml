@@ -68,4 +68,7 @@
     <string name="action_suggest_where_to_buy">SUGGEST WHERE TO BUY?</string>
     <string name="title_random_idea">Random gift idea \n%s</string>
     <string name="label_random_gift_desc">Shake your phone to open the box and show the idea</string>
+    <string name="button_direction">Direction</string>
+    <string name="facebook_client_token">b1d10a0c8fadc17662242579558d45de</string>
+    <string name="facebook_app_id">531691583976978</string>
 </resources>

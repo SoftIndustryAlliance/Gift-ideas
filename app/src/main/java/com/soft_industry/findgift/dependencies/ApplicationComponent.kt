@@ -8,6 +8,7 @@ import com.soft_industry.findgift.domain.repository.PlacesRepository
 import com.soft_industry.findgift.domain.repository.SettingsRepository
 import com.soft_industry.findgift.presentation.pages.giftselection.GiftSelectionFragment
 import com.soft_industry.findgift.presentation.pages.map.MapActivity
+import com.soft_industry.findgift.presentation.pages.placedetails.PlaceDetailsFragment
 import com.soft_industry.findgift.presentation.pages.randomgift.RandomComponent
 import com.soft_industry.findgift.presentation.pages.randomgift.RandomModule
 import com.soft_industry.findgift.presentation.pages.splash.SplashComponent
@@ -37,4 +38,5 @@ interface ApplicationComponent {
     fun inject(giftSelectionFragment: GiftSelectionFragment)
     fun inject(mapActivity: MapActivity)
     fun inject(targetSelectionFragment: TargetSelectionFragment)
+    fun inject(placeDetailsFragment: PlaceDetailsFragment)
 }

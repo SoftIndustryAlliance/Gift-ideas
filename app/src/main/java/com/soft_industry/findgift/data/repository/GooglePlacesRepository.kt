@@ -6,6 +6,7 @@ import com.soft_industry.findgift.data.datasources.remote.PlacesService
 import com.soft_industry.findgift.domain.entities.NearestPlace
 import com.soft_industry.findgift.domain.repository.PlacesRepository
 import io.reactivex.Observable
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -17,11 +18,15 @@ class GooglePlacesRepository @Inject constructor(private val placesService: Plac
     override fun loadNearestPlaces(type: String, latLng: LatLng, languageCode: String)
             : Observable<List<NearestPlace>> {
         return placesService.getNearesLocationsByType(
-                "${latLng.latitude},${latLng.longitude}",
-                type,
-                languageCode,
-                placesApiKey)
-                .map { it.results }
+                latlng = "${latLng.latitude},${latLng.longitude}",
+                type = type,
+                language = languageCode,
+                key = placesApiKey
+        )
+                .map { result ->
+                    if(result.error_message.isNotEmpty()) throw Exception(result.error_message)
+                    else result.results
+                }
                 .flatMapIterable { it }
                 .map{ it.convertToNearestPlace()}
                 .toList()

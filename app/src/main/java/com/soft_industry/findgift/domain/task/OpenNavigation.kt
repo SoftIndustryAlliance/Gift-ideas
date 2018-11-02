@@ -7,8 +7,14 @@ import javax.inject.Inject
 
 class OpenNavigation @Inject constructor(private val navigation: Navigation) {
     fun execute(location: LatLng): Completable {
-        return Completable.defer {
-            Completable.fromAction { navigation.navigateTo(location) }
+        return Completable.create {
+            try {
+                navigation.navigateTo(location)
+                it.onComplete()
+            } catch (e : Exception) {
+                it.onError(e)
+            }
+
         }
     }
 }
