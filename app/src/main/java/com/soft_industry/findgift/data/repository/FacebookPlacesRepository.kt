@@ -23,10 +23,10 @@ class FacebookPlacesRepository @Inject constructor(): PlacesRepository {
         return Observable.create<GraphResponse> { emitter ->
 
             val builder = PlaceSearchRequestParams.Builder()
-                    .addCategory(type)
                     .addField(PlaceFields.NAME)
                     .addField(PlaceFields.LOCATION)
                     .addField(PlaceFields.PHONE)
+                    .setSearchText(type)
             val location = Location("custom")
             location.longitude = latLng.longitude
             location.latitude = latLng.latitude
@@ -41,7 +41,7 @@ class FacebookPlacesRepository @Inject constructor(): PlacesRepository {
                 .map { NearestPlace(
                         name = "Bookshop",
                         latLng = LatLng(50.9089649,34.7972135),
-                        icon = "http://edinstvennaya.ua/pictures/article/17784_max.jpg"
+                        thumbnail = "http://edinstvennaya.ua/pictures/article/17784_max.jpg"
                 )
                 }
                 .map { listOf(it) }

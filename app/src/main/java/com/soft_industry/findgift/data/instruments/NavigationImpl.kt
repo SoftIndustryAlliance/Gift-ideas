@@ -12,6 +12,7 @@ class NavigationImpl @Inject constructor(val context: Context) : Navigation {
     override fun navigateTo(location: LatLng) {
         val gmmIntentUri = Uri.parse("google.navigation:q=${location.latitude},${location.longitude}")
         val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+        mapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         mapIntent.setPackage("com.google.android.apps.maps")
         context.startActivity(mapIntent)
     }

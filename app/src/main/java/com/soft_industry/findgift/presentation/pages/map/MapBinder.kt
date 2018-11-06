@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.withLatestFrom
 
 interface MapBinder : Disposable{
 
@@ -33,18 +34,21 @@ interface MapBinder : Disposable{
         private val disposable = CompositeDisposable()
         private val mapInitialized = PublishRelay.create<GoogleMap>()
 
+        private val loadingView = AndroidView(root.findViewById(R.id.pb_shops_loading), renderer)
         private val places = stateRenderer
                 .filter { it.places != null }
                 .flatMapIterable { it.places!! }
-
+        private val placesRenderer = Observables.combineLatest(mapInitialized, places)
         private val loading = stateRenderer.map {
             when(it.loading) {
                 true -> View.Visibility.VISIBLE
                 false -> View.Visibility.GONE
             }
         }
-        private val loadingView = AndroidView(root.findViewById(R.id.pb_shops_loading), renderer)
-        private val placesRenderer = Observables.combineLatest(mapInitialized, places)
+        private val zoomToPosition = stateRenderer
+                .filter { it.currentPlace != null }
+                .map { it.currentPlace!! }
+                .withLatestFrom(mapInitialized)
 
         init {
             mapFragment.getMapAsync(mapInitialized::accept)
@@ -57,12 +61,16 @@ interface MapBinder : Disposable{
                     marker.tag
                         ?.takeIf { it is NearestPlace }
                         ?.let { showNearestPlaceDetails.accept(it as NearestPlace) }
-                    true
+                    return@setOnMarkerClickListener true
                 }
             }
             disposable += placesRenderer.subscribe { (map, place) ->
                 val marker  = map.addMarker(place.asMarker())
                 marker.tag = place
+            }
+
+            disposable += zoomToPosition.subscribe { (position, map) ->
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
             }
 
 

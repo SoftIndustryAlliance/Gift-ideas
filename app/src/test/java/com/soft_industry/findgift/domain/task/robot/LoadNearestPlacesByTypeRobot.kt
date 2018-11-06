@@ -17,13 +17,13 @@ class LoadNearestPlacesByTypeRobot(private val locationRepository: TestLocationR
                                    private val dataRepository: TestDataRepositoryImpl) {
     val bookshopNearestPlaces = listOf(
             NearestPlace(name = "Knyholyb",
-                    icon = "icon",
+                    thumbnail = "icon",
                     latLng = LatLng(1.0,1.0)
             )
     )
     val gymNearestPlaces = listOf(
             NearestPlace(name = "Virtus",
-                    icon = "icon",
+                    thumbnail = "icon",
                     latLng = LatLng(1.0,1.0)
             )
     )

@@ -11,8 +11,8 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.withLatestFrom
 
 interface PlaceDetailsBinder : Disposable {
     val renderer: Consumer<PlaceDetailsState>
@@ -23,20 +23,21 @@ interface PlaceDetailsBinder : Disposable {
 
         override val renderer = PublishRelay.create<PlaceDetailsState>()
 
-        private val placeReady = renderer.filter { it.place != null }.map { it.place!! }
+        private val placeDetails = renderer
+                .filter { it.place != null }
+                .map { it.place!! }
         private val showDirectionObservable = RxView.clicks(root.findViewById(R.id.button_show_direction))
+                .map { true }
         private val placeLabel = RxTextView.text(root.findViewById(R.id.text_place_name))
         private val rxPicassoImageLoader = RxPicassoImageLoader(root.findViewById(R.id.image_photo))
 
-        override val showRouteRequested: Observable<NearestPlace> = Observables.combineLatest(
-                showDirectionObservable,
-                placeReady,
+        override val showRouteRequested: Observable<NearestPlace> = showDirectionObservable
+                .withLatestFrom(placeDetails)
                 { _, place -> place}
-        )
 
         init {
-            disposable += placeReady.map { it.name }.subscribe(placeLabel)
-            disposable += placeReady.map { it.icon }.subscribe(rxPicassoImageLoader)
+            disposable += placeDetails.map { it.name }.subscribe(placeLabel)
+            disposable += placeDetails.map { it.thumbnail }.subscribe(rxPicassoImageLoader)
         }
 
         override fun isDisposed() = disposable.isDisposed

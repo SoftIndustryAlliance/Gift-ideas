@@ -10,4 +10,4 @@ import kotlinx.android.parcel.Parcelize
  */
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class NearestPlace(val name: String, val latLng: LatLng, val icon: String) : Parcelable
+data class NearestPlace(val name: String, val latLng: LatLng, val thumbnail: String) : Parcelable
