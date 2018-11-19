@@ -1,5 +1,5 @@
 ext.versions = [
-        agp                    : '3.2.0', //needed for androidx
+        agp                    : '3.2.1', //needed for androidx
         buildTools             : '27.0.3',
         compileSdk             : 27,
         targetSdk              : 26,
